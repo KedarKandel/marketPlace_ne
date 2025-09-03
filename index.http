@@ -1,0 +1,24 @@
+
+### register user request
+POST http://localhost:4000/api/auth/register
+Content-Type: application/json
+
+{
+    "name":"Bipana Timilsina",
+    "email":"bipana@gmail.com",
+    "password":"password123"
+}
+
+
+### login user request
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+   "email":"bipana@gmail.com",
+    "password":"password123"
+}
+
+
+### request to get products by userid
+GET http://localhost:4000/api/products?userId=741bdbe4-283a-4ef7-f4c6-e35b416c8fc8
