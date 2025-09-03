@@ -4,8 +4,8 @@ POST http://localhost:4000/api/auth/register
 Content-Type: application/json
 
 {
-    "name":"Bipana Timilsina",
-    "email":"bipana@gmail.com",
+    "name":"Yuvi kandel",
+    "email":"ked@gmail.com",
     "password":"password123"
 }
 
@@ -15,7 +15,7 @@ POST http://localhost:4000/api/auth/login
 Content-Type: application/json
 
 {
-   "email":"bipana@gmail.com",
+   "email":"ked@gmail.com",
     "password":"password123"
 }
 

@@ -2,15 +2,11 @@ import { Hono } from "hono";
 import {
   loginValidator,
   registerValidator,
-} from "../validators/user/userValidator";
-import {
-  getUserByUserEmail,
-  insertUser,
-  type NewUserType,
-} from "../db/queries/user.queries";
-import { generateJwtToken } from "../helpers/generateJwtToken";
+} from "../validators/user/userValidator.ts";
+import { authenticateUser, insertUser } from "../db/queries/auth.queries.ts";
+import { generateJwtToken } from "../helpers/generateJwtToken.ts";
 import { setCookie } from "hono/cookie";
-import { cookieOptions } from "../helpers/cookieOptions";
+import { cookieOptions } from "../helpers/cookieOptions.ts";
 
 const router = new Hono();
 
@@ -27,7 +23,15 @@ router.post("/register", registerValidator, async (c) => {
     const newUser = await insertUser(userData);
     const token = await generateJwtToken(newUser.id);
     setCookie(c, "authToken", token, cookieOptions);
-    return c.json({ message: "User registered successfully", newUser });
+    // hide password
+
+    return c.json({
+      message: "User registered successfully",
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+      },
+    });
   } catch (error) {
     // drizzle nests pg error inside(error === error.cause)
     if (
@@ -50,30 +54,32 @@ router.post("/login", loginValidator, async (c) => {
   const userReq = c.req.valid("json");
 
   try {
-    const user = await getUserByUserEmail(userReq.email);
-
-    if (!user) {
-      return c.json({ messsage: "Invalid credentials" });
-    }
-
-    const isValidUser = Bun.password.verify(userReq.password, user.password);
-    if (!isValidUser) {
-      return c.json({ message: "Invalid creadentials" });
-    }
+    const user = await authenticateUser(userReq.email, userReq.password);
     const token = await generateJwtToken(user.id);
     setCookie(c, "authToken", token, cookieOptions);
 
-    // remove password before sending respose user
-    const { password, ...safeUser } = user;
-    return c.json({
-      message: "Login seccessful",
-      safeUser,
-    });
+    return c.json(
+      {
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      },
+      200
+    );
   } catch (error) {
-    console.log(error);
-    return c.json({
-      error: "Unable to login",
-    });
+    if (error instanceof Error) {
+      if (error.message.includes("User not found")) {
+        return c.json({ error: "User not found" }, 404);
+      }
+      if (error.message.includes("Invalid credentials")) {
+        return c.json({ error: "Invalid credentials" }, 401);
+      }
+    }
+
+    console.error(error);
+    return c.json({ error: "Internal server error" }, 500);
   }
 });
 

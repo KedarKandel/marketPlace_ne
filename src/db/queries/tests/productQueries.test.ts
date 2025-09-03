@@ -10,7 +10,7 @@ import {
   destroyTestDb,
   type TestDbContext,
 } from "../../../tests/setup-test-db.ts";
-import { insertUser, type NewUserType } from "../user.queries.ts";
+import { insertUser, type NewUserType } from "../auth.queries.ts";
 import type { UUID } from "crypto";
 
 export let ctx: TestDbContext;

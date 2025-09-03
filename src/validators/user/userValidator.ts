@@ -1,10 +1,9 @@
 import { validator } from "hono/validator";
-import { registerSchema } from "../user/userSchema";
-import { loginSchema } from "../user/userSchema";
+import { registerSchema } from "../user/userSchema.ts";
+import { loginSchema } from "../user/userSchema.ts";
 
 
-
-// register validator 
+//1. register validator 
 export const registerValidator = validator("json", (value, c) => {
   const parsed = registerSchema.safeParse(value);
   
@@ -18,7 +17,7 @@ export const registerValidator = validator("json", (value, c) => {
 });
 
 
-// login validator 
+//2. login validator 
 export const loginValidator = validator("json", (value, c) => {
   const parsed = loginSchema.safeParse(value);
   if (!parsed.success) {
