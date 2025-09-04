@@ -1,12 +1,15 @@
 import { Stack } from "expo-router";
+
 import "../global.css";
+
 export default function RootLayout() {
   return (
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: "gray" },
-        headerStyle: { backgroundColor: "#08CB00" },
-        headerTintColor: "white",
+        contentStyle: { backgroundColor: "transparent" },
+        headerStyle: { backgroundColor: "#0A580C" },
+        headerTintColor: "gray",
+        animationDuration: 100,
       }}
     >
       <Stack.Screen
@@ -19,7 +22,7 @@ export default function RootLayout() {
         name="(auth)/auth"
         options={{
           headerShown: true,
-          title:"Get started"
+          title: "Get started",
         }}
       />
     </Stack>

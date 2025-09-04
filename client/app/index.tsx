@@ -1,16 +1,16 @@
 import { useRouter } from "expo-router";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, ImageBackground } from "react-native";
 
+import layoutImg from "../assets/images/layoutImage.jpg";
 export default function Index() {
   const router = useRouter();
   return (
-    <View className="flex-1 bg-white justify-center items-center px-6">
+     <ImageBackground source={layoutImg} imageStyle={{opacity:0.9}}  className="flex-1" resizeMode="cover">
+    <View className="flex-1 justify-center items-center px-8">
       {/* Header Section */}
-      <Text className="text-4xl font-bold text-green-600 mb-4">
-        Fresh Market
-      </Text>
-      <Text className="text-lg text-gray-600 text-center mb-8">
-        Buy fresh fruits and vegetables directly from farmers.
+      <Text className="text-3xl font-bold text-gray-50 mb-4">Fresh Market</Text>
+      <Text className="text-xl font-bold text-gray-50 text-center mb-8">
+        Fresh from farmers to your table {"\n"}Eat healthy & support local!
       </Text>
 
       {/* Get Started Button */}
@@ -18,8 +18,9 @@ export default function Index() {
         onPress={() => router.push("/(auth)/auth?mode=register")}
         className="bg-green-500 px-6 py-3 rounded-xl shadow-md"
       >
-        <Text className="text-white font-semibold text-xl">Get Started</Text>
+        <Text className="text-white font-semibold text-2xl">Get Started</Text>
       </TouchableOpacity>
     </View>
+    </ImageBackground>
   );
 }
